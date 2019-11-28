@@ -17,9 +17,9 @@ function downloadItem(){
     if(downloadQueue.length > 0){
                     var activeItem = downloadQueue[0];
         
-                    console.log("(" + downloadQueue.length + ") downloading " + baseUrl + activeItem.url)
+                    console.log("(" + downloadQueue.length + ") downloading " + activeItem.url)
         
-                    request.get(baseUrl + activeItem.url , auth)
+                    request.get(activeItem.url , auth)
                     .on('error', function(err) {
                         console.log(err)
                         })
@@ -34,7 +34,7 @@ function downloadItem(){
 
 
 
-request.get(baseUrl + '/rest/v1/documents?lang=nl', auth
+request.get(baseUrl + '/rest/v2/documents?lang=nl&pageSize=100', auth
 , function (err, res, body) {
             var result = require('querystring').parse(body)
             var json  = JSON.parse(body);
@@ -42,7 +42,7 @@ request.get(baseUrl + '/rest/v1/documents?lang=nl', auth
             for(var i = 0; i < json.documents.length;++i){
                 console.log(json.documents[i].sender.label + "\t\t\t-\t" + json.documents[i].name);
 
-                var dd = new Date(json.documents[i].creationDate);
+                var dd = new Date(json.documents[i].publishDate);
                 var datePrefex =  dd.getFullYear() + "_"  + (dd.getMonth()+1) + "_" + dd.getDate();
                 var folder = "archive/" + json.documents[i].sender.label.replace(/\//g,'-');
                 var url = json.documents[i].contentUrl;
